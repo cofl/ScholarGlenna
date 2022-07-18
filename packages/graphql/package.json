@@ -1,0 +1,13 @@
+{
+    "name": "@glenna/graphql",
+    "type": "module",
+    "private": true,
+    "main": "dist/index.js",
+    "types": "src/index.ts",
+    "devDependencies": {
+        "graphql-zeus": "^5.1.7"
+    },
+    "scripts": {
+        "gen": "pnpm exec zeus \"http://${HASURA_HOST}:${HASURA_PORT}/v1/graphql\" ./src/generated --node --ts"
+    }
+}

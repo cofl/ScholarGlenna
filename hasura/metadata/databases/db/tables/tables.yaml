@@ -1,0 +1,127 @@
+- table:
+    schema: public
+    name: users
+  array_relationships:
+    - name: accounts
+      using:
+        foreign_key_constraint_on:
+          column: user_id
+          table:
+            schema: public
+            name: guildwars2accounts
+    - name: teammemberships
+      using:
+        foreign_key_constraint_on:
+          column: user_id
+          table:
+            schema: public
+            name: teammembers
+- table:
+    schema: public
+    name: profiles
+  object_relationships:
+    - name: user
+      using:
+        foreign_key_constraint_on: user_id
+- table:
+    schema: public
+    name: userprofiles
+  object_relationships:
+    - name: user
+      using:
+        manual_configuration:
+          remote_table:
+            schema: public
+            name: users
+          column_mapping:
+            user_id: user_id
+    - name: profile
+      using:
+        manual_configuration:
+          remote_table:
+            schema: public
+            name: profiles
+          column_mapping:
+            profile_id: profile_id
+- table:
+    schema: public
+    name: guildwars2accounts
+- table:
+    schema: public
+    name: guilds
+  array_relationships:
+    - name: managers
+      using:
+        foreign_key_constraint_on:
+          column: guild_id
+          table:
+            schema: public
+            name: guildmanagers
+    - name: teams
+      using:
+        foreign_key_constraint_on:
+          column: guild_id
+          table:
+            schema: public
+            name: teams
+- table:
+    schema: public
+    name: guildmanagers
+  object_relationships:
+    - name: user
+      using:
+        foreign_key_constraint_on: user_id
+- table:
+    schema: public
+    name: teams
+  array_relationships:
+    - name: times
+      using:
+        foreign_key_constraint_on:
+          column: team_id
+          table:
+            schema: public
+            name: teamtimes
+    - name: members
+      using:
+        foreign_key_constraint_on:
+          column: team_id
+          table:
+            schema: public
+            name: teammembers
+- table:
+    schema: public
+    name: teamtimes
+- table:
+    schema: public
+    name: guildmembers
+- table:
+    schema: public
+    name: teammembers
+  object_relationships:
+    - name: user
+      using:
+        foreign_key_constraint_on: user_id
+    - name: team
+      using:
+        foreign_key_constraint_on: team_id
+- table:
+    schema: public
+    name: usermemberships
+  object_relationships:
+    - name: user
+      using:
+        manual_configuration:
+          remote_table:
+            schema: public
+            name: users
+          column_mapping:
+            user_id: user_id
+    - name: guild
+      using:
+        manual_configuration:
+          remote_table:
+            schema: public
+            name: guilds
+          column_mapping:
+            guild_id: guild_id

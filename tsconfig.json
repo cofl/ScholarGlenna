@@ -5,6 +5,7 @@
     "references": [
         { "path": "./packages/bot/tsconfig.json" },
         { "path": "./packages/common/tsconfig.json" },
-        { "path": "./packages/util/tsconfig.json" }
+        { "path": "./packages/util/tsconfig.json" },
+        { "path": "./packages/graphql/tsconfig.json" }
     ]
 }

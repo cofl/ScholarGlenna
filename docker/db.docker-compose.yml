@@ -8,10 +8,16 @@ services:
         env_file:
             - .env
             - db.env
+            - hasura.env
+        expose:
+            - 5432
         volumes:
             - type: volume
               source: sql-db
               target: /var/lib/postgresql/data
+            - type: bind
+              source: postgres-init
+              target: /docker-entrypoint-initdb.d
     redis:
         image: redis:7.0-alpine
         ports:
@@ -27,3 +33,17 @@ services:
             - type: volume
               source: redis-db
               target: /data
+    hasura:
+        image: hasura/graphql-engine:v2.8.4
+        env_file:
+            - .env
+            - hasura.env
+        expose:
+            - 8080
+        deploy:
+            restart_policy:
+                condition: on-failure
+                delay: 5s
+                max_attempts: 3
+        depends_on:
+            - postgres

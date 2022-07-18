@@ -11,6 +11,7 @@ services:
         - ../docker/.env
         - ../docker/db.env
         - ../docker/redis.env
+        - ../docker/hasura.env
         - ../config.env
     volumes:
       - /var/run/docker.sock:/var/run/docker-host.sock
