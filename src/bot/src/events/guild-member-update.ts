@@ -2,8 +2,9 @@ import { database } from '../util/database.js'
 import { debug } from '../util/logging.js'
 import { listener } from '../EventListener.js'
 import { safeUsername, type Prisma, safeAlias } from '@glenna/prisma'
+import { GatewayDispatchEvents } from '@glenna/discord'
 
-export const guildMemberUpdateListener = listener('guildMemberUpdate', {
+export const guildMemberUpdateListener = listener(GatewayDispatchEvents.GuildMemberUpdate, {
     async execute(oldMember, newMember){
         if(newMember.user.id === newMember.client.user?.id){
             debug(`Skipping user update for ScholarGlenna bot.`)

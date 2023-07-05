@@ -1,6 +1,8 @@
 import { info, debug, error } from './util/logging.js'
-import { VERSION } from './config.js'
-import { Discord } from '@glenna/discord'
+import { VERSION, DISCORD_TOKEN } from './config.js'
+import { Discord, GatewayDispatchEvents } from '@glenna/discord'
+
+import { Discordv2 } from '@glenna/discord'
 
 // import events
 import { channelDeleteListener } from './events/channel-delete.js'
@@ -14,7 +16,22 @@ import { roleUpdateListener } from './events/role-update.js'
 import { userUpdateListener } from './events/user-update.js'
 import { onCommandListener } from './events/on-command.js'
 
-export const Glenna = Discord.createClient()
+import { REST } from '@discordjs/rest'
+import { WebSocketManager } from '@discordjs/ws'
+import { Client, GatewayIntentBits } from '@discordjs/core'
+
+const rest = new REST({ version: '10' }).setToken(DISCORD_TOKEN)
+const gateway = new WebSocketManager({
+    token: DISCORD_TOKEN,
+    rest,
+    intents: 0
+        | GatewayIntentBits.Guilds
+        | GatewayIntentBits.GuildMembers
+        | GatewayIntentBits.GuildMessages
+        | GatewayIntentBits.GuildMessageReactions
+})
+export const Glenna = new Client({ rest, gateway })
+
 debug("Registering events...")
 channelDeleteListener.register(Glenna)
 guildMemberUpdateListener.register(Glenna)
@@ -29,9 +46,9 @@ userUpdateListener.register(Glenna)
 
 export async function login(): Promise<void> {
     try {
-        debug(`Logging in.`)
-        void await Discord.login(Glenna)
-        debug(`Login successful.`)
+        debug(`Connecting to gateway...`)
+        void await gateway.connect()
+        debug(`Connection successful.`)
         info(`GlennaBot v${VERSION} logged in.`)
     } catch(err){
         error(err)

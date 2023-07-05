@@ -44,3 +44,4 @@ export namespace Discord {
 }
 
 export const DiscordCDN = new CDN()
+export { Discord as Discordv2 } from './v2.js'

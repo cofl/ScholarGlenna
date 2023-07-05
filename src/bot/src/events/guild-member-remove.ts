@@ -1,13 +1,14 @@
 import { debug } from '../util/logging.js'
 import { database } from '../util/database.js'
 import { listener } from '../EventListener.js'
+import { GatewayDispatchEvents } from '@glenna/discord'
 
-export const guildMemberRemoveListener = listener('guildMemberRemove', {
-    async execute(member){
+export const guildMemberRemoveListener = listener(GatewayDispatchEvents.GuildMemberRemove, {
+    async execute({ data: member }){
         const user = await database.guildMember.findFirst({
             where: {
-                user: { snowflake: BigInt(member.id) },
-                guild: { snowflake: BigInt(member.guild.id) }
+                user: { snowflake: BigInt(member.user.id) },
+                guild: { snowflake: BigInt(member.guild_id) }
             },
             select: {
                 id: true,

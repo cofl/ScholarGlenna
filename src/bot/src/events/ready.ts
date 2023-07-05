@@ -1,4 +1,3 @@
-import { info, debug } from '../util/logging.js'
 import { database } from '../util/database.js'
 import { sendWelcomeMessage } from '../util/guild.js'
 import { listener } from '../EventListener.js'
@@ -6,6 +5,8 @@ import { DISCORD_TOKEN, OAUTH_CLIENT_ID } from '../config.js'
 import { registerCommands } from '../commands/index.js'
 import { safeAlias, type Prisma, safeUsername } from '@glenna/prisma'
 import { DiscordAPIError, Role } from '@glenna/discord'
+import { GatewayDispatchEvents } from '@discordjs/core'
+import { Logger } from '../util/logging.js'
 
 function isUserOrMemberNotFoundError(e: any): e is (DiscordAPIError & { code: 10013 | 10007 }) {
     if(!(e instanceof DiscordAPIError))
@@ -15,10 +16,13 @@ function isUserOrMemberNotFoundError(e: any): e is (DiscordAPIError & { code: 10
     return e.code === 10007 || e.code === 10013
 }
 
-export const readyListener = listener('ready', {
+export const readyListener = listener(GatewayDispatchEvents.Ready, {
     once: true,
-    async execute(client){
-        client.application
+    async execute({ shardId, data }){
+        const logger = Logger.get({ origin: 'Event', event: GatewayDispatchEvents.Ready })
+        logger
+
+        client.
         info(`Starting ${client.application.name}`)
         debug(`Beginning startup.`)
         client.setMaxListeners(Infinity)
